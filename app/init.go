@@ -1,6 +1,7 @@
 package app
 
 import "github.com/revel/revel"
+import "bothub/model"
 
 func init() {
 	// Filters is the default set of global filters.
@@ -23,6 +24,9 @@ func init() {
 	// ( order dependent )
 	// revel.OnAppStart(InitDB())
 	// revel.OnAppStart(FillCache())
+
+	obs := model.GetObserver()
+	obs.WaitQueue()
 }
 
 // TODO turn this into revel.HeaderFilter

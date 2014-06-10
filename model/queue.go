@@ -7,3 +7,8 @@ type Queue struct {
 	Time   time.Time
 	Text   string
 }
+
+type Observer struct {
+	enq *<-chan Queue
+	deq *chan<- Queue
+}

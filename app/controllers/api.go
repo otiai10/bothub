@@ -30,14 +30,8 @@ func (c Api) QueueAdd(queue string) revel.Result {
 		})
 	}
 
-	obs := GetObserver()
-	obs.Enqueue(Queue{
-		Master{
-			"otiai10である",
-		},
-		time.Now(),
-		"ここがテキストである",
-	})
+	GetObserver().Enqueue(NewQueueFromPayload(p))
+
 	return c.RenderJson(Response{
 		true, "OK", p,
 	})

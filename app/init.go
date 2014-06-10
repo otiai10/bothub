@@ -26,7 +26,8 @@ func init() {
 	// revel.OnAppStart(FillCache())
 
 	obs := model.GetObserver()
-	obs.WaitQueue()
+	go obs.WaitQueue()
+	go obs.ListenQueue()
 }
 
 // TODO turn this into revel.HeaderFilter

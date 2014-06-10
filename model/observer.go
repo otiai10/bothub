@@ -1,6 +1,7 @@
 package model
 
 import "fmt"
+import "time"
 
 var instance_observer *Observer
 
@@ -23,18 +24,21 @@ func (obs *Observer) Enqueue(q Queue) (e error) {
 	return
 }
 func (obs *Observer) WaitQueue() {
-	go func() {
-		for {
-			q := <-obs.Enq
-			fmt.Printf("ここで %+v\n", q)
-		}
-	}()
+	for {
+		q := <-obs.Enq
+		obs.generateRoutine(q)
+	}
 }
 func (obs *Observer) ListenQueue() {
+	for {
+		timed := <-obs.Timed
+		fmt.Printf("タイムアップ %+v\n", timed)
+	}
+}
+func (obs *Observer) generateRoutine(q Queue) {
 	go func() {
-		for {
-			timed := <-obs.Timed
-			fmt.Printf("タイムアップ %+v\n", timed)
-		}
+		dur := q.Time.Sub(time.Now())
+		<-time.After(dur)
+		obs.Timed <- q
 	}()
 }

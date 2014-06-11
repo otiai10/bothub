@@ -1,7 +1,8 @@
 package model
 
-import "fmt"
 import "time"
+
+import "github.com/revel/revel"
 
 var instance_observer *Observer
 
@@ -29,10 +30,16 @@ func (obs *Observer) WaitQueue() {
 		obs.generateRoutine(q)
 	}
 }
+
+// なんかObserverってmodelでいいのかな
 func (obs *Observer) ListenQueue() {
 	for {
 		timed := <-obs.Timed
-		fmt.Printf("タイムアップ %+v\n", timed)
+		bot, _ := FindBotByName("bot." + timed.Master.Name)
+		e := bot.Tweet("@" + timed.Master.Name + " " + timed.Text)
+		if e != nil {
+			revel.WARN.Println("Tweet Failed!!!!!!!!", e)
+		}
 	}
 }
 func (obs *Observer) generateRoutine(q Queue) {

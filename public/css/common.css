@@ -2,3 +2,7 @@ h1 {
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 4em;
 }
+h1>a {
+    text-decoration: none;
+    color:        inherit;
+}

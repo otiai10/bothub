@@ -35,10 +35,15 @@ func (obs *Observer) WaitQueue() {
 func (obs *Observer) ListenQueue() {
 	for {
 		timed := <-obs.Timed
-		bot, _ := FindBotByName("bot." + timed.Master.Name)
-		e := bot.Tweet("@" + timed.Master.Name + " " + timed.Text)
-		if e != nil {
-			revel.WARN.Println("Tweet Failed!!!!!!!!", e)
+		var bot *Bot
+		var e error
+		if bot, e = FindBotByName("bot." + timed.Master.Name); e != nil {
+			revel.ERROR.Println("botが見つからない", e)
+			continue
+		}
+		if e = bot.Tweet("@" + timed.Master.Name + " " + timed.Text); e != nil {
+			revel.ERROR.Println("tweetしっぱい", e)
+			continue
 		}
 	}
 }

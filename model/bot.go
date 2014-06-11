@@ -1,6 +1,7 @@
 package model
 
 import "github.com/mrjones/oauth"
+import "github.com/otiai10/rodeo"
 
 type Bot struct {
 	Master Master
@@ -8,12 +9,12 @@ type Bot struct {
 }
 
 func FindBotByName(name string) (bot *Bot, e error) {
-	if keys, e := findBotKeysByName(name); e == nil {
+	if token, e := findBotKeysByName(name); e == nil {
 		bot = &Bot{
 			Master{name},
 			oauth.AccessToken{
-				keys.Token,
-				keys.Secret,
+				token.Token,
+				token.Secret,
 				make(map[string]string),
 			},
 		}
@@ -21,17 +22,19 @@ func FindBotByName(name string) (bot *Bot, e error) {
 	return
 }
 
-type accessKeys struct {
-	Token  string
-	Secret string
-}
+func findBotKeysByName(name string) (token AccessToken, e error) {
+	vaquero, e := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"})
+	if e != nil {
+		return
+	}
 
-func findBotKeysByName(name string) (k accessKeys, e error) {
-	k = db[name]
+	// うーんこのへん生々しい
+	botName := vaquero.Get(name)
+	e = vaquero.Cast("token."+botName, &token)
 	return
 }
 func (b *Bot) Tweet(text string) (e error) {
-	_, e = consumer.Post(
+	_, e = GetConsumer().Post(
 		"https://api.twitter.com/1.1/statuses/update.json",
 		map[string]string{
 			"status": text,

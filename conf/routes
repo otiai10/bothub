@@ -8,6 +8,9 @@ GET     /                                       App.Index
 GET     /api                                    Api.Index
 POST    /api/queue/add                          Api.QueueAdd
 
+GET     /bot/login                              Bot.Login
+GET     /bot/login/callback                     Bot.Callback
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

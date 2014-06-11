@@ -7,13 +7,26 @@ import "encoding/json"
 import "github.com/mrjones/oauth"
 import "strings"
 
+import "github.com/otiai10/rodeo"
+
 type Bot struct {
 	*revel.Controller
 }
 
 func (c Bot) Index() revel.Result {
+
 	screenName := c.Session["screen_name"]
 	profileImageUrl := c.Session["profile_image_url"]
+
+	/* It perfectly works!
+	   var token model.AccessToken
+	   host := revel.Config.StringDefault("redis.host", "localhost")
+	   port := revel.Config.StringDefault("redis.port", "6379")
+	   vaquero, _ := rodeo.TheVaquero(rodeo.Conf{host,port})
+	   vaquero.Cast("token." + screenName, &token)
+	   fmt.Printf("とれた？ %+v\n", token)
+	*/
+
 	return c.Render(screenName, profileImageUrl)
 }
 
@@ -60,8 +73,6 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 		return c.Redirect(App.Index)
 	}
 
-	revel.INFO.Printf("これが欲しかったの\n%+v\n", accessToken)
-
 	// 成功したので、これを用いてユーザ情報を取得する
 	resp, _ := model.GetConsumer().Get(
 		//"https://api.twitter.com/1.1/statuses/mentions_timeline.json",
@@ -79,6 +90,13 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 
 	c.Session["screen_name"] = account.ScreenName
 	c.Session["profile_image_url"] = strings.Replace(account.ProfileImageUrl, "_normal.", ".", -1)
+
+	// revel.INFO.Printf("これが欲しかったの\n%+v\n", accessToken)
+	revel.INFO.Printf("これが欲しかったの\n%+v\n", account)
+
+	vaquero, _ := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"})
+	key := "token." + account.ScreenName
+	vaquero.Store(key, accessToken)
 
 	return c.Redirect(Bot.Index)
 }

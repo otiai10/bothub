@@ -8,6 +8,7 @@ GET     /                                       App.Index
 GET     /api                                    Api.Index
 POST    /api/queue/add                          Api.QueueAdd
 
+GET     /bot                                    Bot.Index
 GET     /bot/login                              Bot.Login
 GET     /bot/login/callback                     Bot.Callback
 

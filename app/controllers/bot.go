@@ -91,8 +91,7 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 	c.Session["screen_name"] = account.ScreenName
 	c.Session["profile_image_url"] = strings.Replace(account.ProfileImageUrl, "_normal.", ".", -1)
 
-	// revel.INFO.Printf("これが欲しかったの\n%+v\n", accessToken)
-	revel.INFO.Printf("これが欲しかったの\n%+v\n", account)
+	// revel.INFO.Printf("これが欲しかったの\n%+v\n", account)
 
 	vaquero, _ := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"})
 	key := "token." + account.ScreenName

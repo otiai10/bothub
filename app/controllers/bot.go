@@ -2,12 +2,11 @@ package controllers
 
 import "github.com/revel/revel"
 import "bothub/model"
+import "bothub/infrastructure"
 import "fmt"
 import "encoding/json"
 import "github.com/mrjones/oauth"
 import "strings"
-
-import "github.com/otiai10/rodeo"
 
 type Bot struct {
 	*revel.Controller
@@ -88,7 +87,7 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 	c.Session["screen_name"] = bot.ScreenName
 	c.Session["profile_image_url"] = strings.Replace(bot.ProfileImageUrl, "_normal.", ".", -1)
 
-	vaquero, _ := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"})
+	vaquero, _ := infrastructure.GetVaquero()
 
 	vaquero.Store(bot.ScreenName, bot)
 

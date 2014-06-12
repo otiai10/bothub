@@ -1,7 +1,7 @@
 package model
 
+import "bothub/infrastructure"
 import "github.com/mrjones/oauth"
-import "github.com/otiai10/rodeo"
 import "fmt"
 
 type Bot struct {
@@ -12,7 +12,7 @@ type Bot struct {
 }
 
 func FindBotByName(botName string) (bot *Bot, e error) {
-	if vaquero, e := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"}); e == nil {
+	if vaquero, e := infrastructure.GetVaquero(); e == nil {
 		e = vaquero.Cast(botName, &bot)
 	}
 	if bot == nil {
@@ -22,14 +22,12 @@ func FindBotByName(botName string) (bot *Bot, e error) {
 }
 
 func FindBotByMasterName(masterName string) (bot *Bot, e error) {
-
-	if vaquero, e := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"}); e == nil {
+	if vaquero, e := infrastructure.GetVaquero(); e == nil {
 		if botName := vaquero.Get("bot." + masterName); botName != "" {
 			return FindBotByName(botName)
 		}
 		e = fmt.Errorf("Bot related to master name `%s` not found", masterName)
 	}
-
 	return
 }
 

@@ -24,15 +24,6 @@ func (c Bot) Index() revel.Result {
 	}
 	// }}}
 
-	/* It perfectly works!
-	   var token model.AccessToken
-	   host := revel.Config.StringDefault("redis.host", "localhost")
-	   port := revel.Config.StringDefault("redis.port", "6379")
-	   vaquero, _ := rodeo.TheVaquero(rodeo.Conf{host,port})
-	   vaquero.Cast("token." + screenName, &token)
-	   fmt.Printf("とれた？ %+v\n", token)
-	*/
-
 	return c.Render(bot)
 }
 
@@ -88,22 +79,18 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 		accessToken,
 	)
 	defer resp.Body.Close()
-	account := struct {
-		Name            string `json:"name"`
-		ProfileImageUrl string `json:"profile_image_url"`
-		ScreenName      string `json:"screen_name"`
-	}{}
-	_ = json.NewDecoder(resp.Body).Decode(&account)
+	var bot model.Bot
+	_ = json.NewDecoder(resp.Body).Decode(&bot)
 	// }}}
 
-	c.Session["screen_name"] = account.ScreenName
-	c.Session["profile_image_url"] = strings.Replace(account.ProfileImageUrl, "_normal.", ".", -1)
+	bot.Token = *accessToken
 
-	// revel.INFO.Printf("これが欲しかったの\n%+v\n", account)
+	c.Session["screen_name"] = bot.ScreenName
+	c.Session["profile_image_url"] = strings.Replace(bot.ProfileImageUrl, "_normal.", ".", -1)
 
 	vaquero, _ := rodeo.TheVaquero(rodeo.Conf{"localhost", "6379"})
-	key := "token." + account.ScreenName
-	vaquero.Store(key, accessToken)
+
+	vaquero.Store(bot.ScreenName, bot)
 
 	return c.Redirect(Bot.Index)
 }
@@ -112,24 +99,20 @@ func (c Bot) Confirm(master_name string) revel.Result {
 
 	// {{{ TODO: DRY
 	screenName, ok := c.Session["screen_name"]
-	profileImageUrl, ok := c.Session["profile_image_url"]
-	bot := model.Bot{
-		ScreenName:      screenName,
-		ProfileImageUrl: profileImageUrl,
-	}
 	if !ok {
 		return c.Redirect(App.Index)
 	}
 	// }}}
 
-	token, _ := model.FindAccessTokenFromName(bot.ScreenName)
+	bot, _ := model.FindBotByName(screenName)
+
 	// {{{ TODO: DRY インフラ
 	resp, _ := model.GetConsumer().Get(
 		"https://api.twitter.com/1.1/users/lookup.json",
 		map[string]string{
 			"screen_name": strings.Replace(master_name, "@", "", 1),
 		},
-		&token,
+		&bot.Token,
 	)
 	defer resp.Body.Close()
 	accounts := []model.Master{}
@@ -144,4 +127,8 @@ func (c Bot) Confirm(master_name string) revel.Result {
 	master.ProfileImageUrl = strings.Replace(master.ProfileImageUrl, "_normal.", ".", -1)
 
 	return c.Render(bot, master)
+}
+
+func (c Bot) Update() revel.Result {
+	return c.Redirect(Bot.Index)
 }

@@ -37,8 +37,8 @@ func (obs *Observer) ListenQueue() {
 		timed := <-obs.Timed
 		var bot *Bot
 		var e error
-		if bot, e = FindBotByName("bot." + timed.Master.Name); e != nil {
-			revel.ERROR.Println("botが見つからない", e)
+		if bot, e = FindBotByMasterName(timed.Master.Name); e != nil {
+			revel.ERROR.Println("botが見つからない", timed.Master.Name, e)
 			continue
 		}
 		if e = bot.Tweet("@" + timed.Master.Name + " " + timed.Text); e != nil {

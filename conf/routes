@@ -12,6 +12,7 @@ GET     /bot                                    Bot.Index
 GET     /bot/login                              Bot.Login
 GET     /bot/login/callback                     Bot.Callback
 POST    /bot/confirm                            Bot.Confirm
+POST    /bot/update                             Bot.Update
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

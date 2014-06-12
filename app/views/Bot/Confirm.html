@@ -1,0 +1,26 @@
+{{set . "title" "BotHub"}}
+{{template "partials/header.html" .}}
+{{template "partials/app-header.html" .}}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div>以下のアカウントでログインちう</div>
+      {{template "partials/account/big.html" .bot}}
+    </div>
+    <div class="col-md-6">
+      <div>このひとをマスター登録しますか？</div>
+      {{template "partials/account/big.html" .master}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 single">
+      <form method="post" action="/bot/update">
+        <input type="hidden" value="{{.master.ScreenName}}" name="master_confirmed">
+        <input class="btn btn-default" type="submit" value="OK" name="submit">
+      </form>
+    </div>
+  </div>
+<div>
+
+{{template "partials/footer.html" .}}

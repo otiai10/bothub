@@ -11,6 +11,7 @@ POST    /api/queue/add                          Api.QueueAdd
 GET     /bot                                    Bot.Index
 GET     /bot/login                              Bot.Login
 GET     /bot/login/callback                     Bot.Callback
+POST    /bot/confirm                            Bot.Confirm
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

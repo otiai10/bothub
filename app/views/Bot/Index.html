@@ -1,12 +1,17 @@
-{{set . "title" "Bot"}}
+{{set . "title" "BotHub"}}
 {{template "partials/header.html" .}}
 {{template "partials/app-header.html" .}}
 
 <div class="container">
   <div class="row">
-    <div>以下のアカウントでログインちう</div>
-    <div>{{.screenName}}</div>
-    <div><img src="{{.profileImageUrl}}"></div>
+    <div class="col-md-6">
+      <div>以下のアカウントでログインちう</div>
+      {{template "partials/account/big.html" .bot}}
+    </div>
+    <div class="col-md-6">
+      <div>マスターを登録</div>
+      {{template "partials/account/choose-master.html"}}
+    </div>
   </div>
 <div>
 

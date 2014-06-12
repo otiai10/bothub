@@ -82,13 +82,13 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 	_ = json.NewDecoder(resp.Body).Decode(&bot)
 	// }}}
 
+	bot.ProfileImageUrl = strings.Replace(bot.ProfileImageUrl, "_normal.", ".", -1)
 	bot.Token = *accessToken
 
 	c.Session["screen_name"] = bot.ScreenName
-	c.Session["profile_image_url"] = strings.Replace(bot.ProfileImageUrl, "_normal.", ".", -1)
+	c.Session["profile_image_url"] = bot.ProfileImageUrl
 
 	vaquero, _ := infrastructure.GetVaquero()
-
 	vaquero.Store(bot.ScreenName, bot)
 
 	return c.Redirect(Bot.Index)

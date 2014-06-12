@@ -13,16 +13,10 @@ type Bot struct {
 }
 
 func (c Bot) Index() revel.Result {
-
-	// {{{ TODO: DRY
-	screenName := c.Session["screen_name"]
-	profileImageUrl := c.Session["profile_image_url"]
-	bot := model.Bot{
-		ScreenName:      screenName,
-		ProfileImageUrl: profileImageUrl,
+	bot, ok := checkBotLogined(c)
+	if !ok {
+		return c.Redirect(App.Index)
 	}
-	// }}}
-
 	return c.Render(bot)
 }
 
@@ -96,14 +90,12 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 
 func (c Bot) Confirm(master_name string) revel.Result {
 
-	// {{{ TODO: DRY
-	screenName, ok := c.Session["screen_name"]
+	bot, ok := checkBotLogined(c)
 	if !ok {
 		return c.Redirect(App.Index)
 	}
-	// }}}
 
-	bot, _ := model.FindBotByName(screenName)
+	bot, _ = model.FindBotByName(bot.ScreenName)
 
 	// {{{ TODO: DRY インフラ
 	resp, _ := model.GetConsumer().Get(
@@ -130,4 +122,18 @@ func (c Bot) Confirm(master_name string) revel.Result {
 
 func (c Bot) Update() revel.Result {
 	return c.Redirect(Bot.Index)
+}
+
+func checkBotLogined(c Bot) (bot *model.Bot, ok bool) {
+	screenName, nameOK := c.Session["screen_name"]
+	profileImageUrl, iconOK := c.Session["profile_image_url"]
+	ok = (nameOK && iconOK)
+	if !ok {
+		return
+	}
+	bot = &model.Bot{
+		ScreenName:      screenName,
+		ProfileImageUrl: profileImageUrl,
+	}
+	return
 }

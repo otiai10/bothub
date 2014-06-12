@@ -1,5 +1,5 @@
 test-results/
 tmp/
 routes/
-model/db.go
+conf/app.conf
 dump.rdb

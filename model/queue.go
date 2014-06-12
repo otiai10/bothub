@@ -15,7 +15,7 @@ func NewQueueFromPayload(p Payload) (q Queue) {
 func NewQueue(masterName string, finish time.Time, text string) Queue {
 	return Queue{
 		Master{
-			masterName,
+			Name: masterName,
 		},
 		finish,
 		text,

@@ -4,14 +4,18 @@ import "github.com/mrjones/oauth"
 import "github.com/otiai10/rodeo"
 
 type Bot struct {
-	Master Master
-	token  oauth.AccessToken
+	Master          Master
+	ScreenName      string
+	ProfileImageUrl string
+	token           oauth.AccessToken
 }
 
 func FindBotByName(name string) (bot *Bot, e error) {
 	if token, e := findBotKeysByName(name); e == nil {
 		bot = &Bot{
-			Master{name},
+			Master{Name: name},
+			"",
+			"",
 			oauth.AccessToken{
 				token.Token,
 				token.Secret,

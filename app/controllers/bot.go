@@ -15,8 +15,14 @@ type Bot struct {
 
 func (c Bot) Index() revel.Result {
 
+	// {{{ TODO: DRY
 	screenName := c.Session["screen_name"]
 	profileImageUrl := c.Session["profile_image_url"]
+	bot := model.Bot{
+		ScreenName:      screenName,
+		ProfileImageUrl: profileImageUrl,
+	}
+	// }}}
 
 	/* It perfectly works!
 	   var token model.AccessToken
@@ -27,7 +33,7 @@ func (c Bot) Index() revel.Result {
 	   fmt.Printf("とれた？ %+v\n", token)
 	*/
 
-	return c.Render(screenName, profileImageUrl)
+	return c.Render(bot)
 }
 
 func (c Bot) Login() revel.Result {
@@ -74,6 +80,7 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 	}
 
 	// 成功したので、これを用いてユーザ情報を取得する
+	// {{{ TODO: DRY インフラ
 	resp, _ := model.GetConsumer().Get(
 		//"https://api.twitter.com/1.1/statuses/mentions_timeline.json",
 		"https://api.twitter.com/1.1/account/verify_credentials.json",
@@ -87,6 +94,7 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 		ScreenName      string `json:"screen_name"`
 	}{}
 	_ = json.NewDecoder(resp.Body).Decode(&account)
+	// }}}
 
 	c.Session["screen_name"] = account.ScreenName
 	c.Session["profile_image_url"] = strings.Replace(account.ProfileImageUrl, "_normal.", ".", -1)
@@ -98,4 +106,42 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 	vaquero.Store(key, accessToken)
 
 	return c.Redirect(Bot.Index)
+}
+
+func (c Bot) Confirm(master_name string) revel.Result {
+
+	// {{{ TODO: DRY
+	screenName, ok := c.Session["screen_name"]
+	profileImageUrl, ok := c.Session["profile_image_url"]
+	bot := model.Bot{
+		ScreenName:      screenName,
+		ProfileImageUrl: profileImageUrl,
+	}
+	if !ok {
+		return c.Redirect(App.Index)
+	}
+	// }}}
+
+	token, _ := model.FindAccessTokenFromName(bot.ScreenName)
+	// {{{ TODO: DRY インフラ
+	resp, _ := model.GetConsumer().Get(
+		"https://api.twitter.com/1.1/users/lookup.json",
+		map[string]string{
+			"screen_name": strings.Replace(master_name, "@", "", 1),
+		},
+		&token,
+	)
+	defer resp.Body.Close()
+	accounts := []model.Master{}
+	_ = json.NewDecoder(resp.Body).Decode(&accounts)
+	// }}}
+
+	var master model.Master
+	if len(accounts) < 1 {
+		return c.Redirect(Bot.Index)
+	}
+	master = accounts[0]
+	master.ProfileImageUrl = strings.Replace(master.ProfileImageUrl, "_normal.", ".", -1)
+
+	return c.Render(bot, master)
 }

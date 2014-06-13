@@ -11,15 +11,14 @@
     <div class="col-md-6">
       <div>このひとをマスター登録しますか？</div>
       {{template "partials/account/big.html" .master}}
+      <div class="btn-container alone">
+        <form method="post" action="/bot/update">
+          <input type="hidden" value="{{.master.ScreenName}}" name="master_confirmed">
+          <input class="btn btn-default" type="submit" value="OK" name="submit">
+        </form>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12 single">
-      <form method="post" action="/bot/update">
-        <input type="hidden" value="{{.master.ScreenName}}" name="master_confirmed">
-        <input class="btn btn-default" type="submit" value="OK" name="submit">
-      </form>
-    </div>
   </div>
 <div>
 

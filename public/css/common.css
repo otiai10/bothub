@@ -18,3 +18,8 @@ div.col-md-12.single {
 img.account-big {
     width: 300px;
 }
+/* 1ボタンだけの容れ物 */
+div.btn-container.alone {
+    padding-top: 24px;
+    padding-bottom: 24px;    
+}

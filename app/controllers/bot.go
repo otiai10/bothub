@@ -13,11 +13,22 @@ type Bot struct {
 }
 
 func (c Bot) Index() revel.Result {
+
 	bot, ok := checkBotLogined(c)
 	if !ok {
 		return c.Redirect(App.Index)
 	}
-	return c.Render(bot)
+
+	var storedBot model.Bot
+	var masterAlreadyRegistered bool
+	vaquero, _ := infrastructure.GetVaquero()
+	vaquero.Cast(bot.ScreenName, &storedBot)
+	if storedBot.Master.ScreenName != "" && storedBot.Master.ProfileImageUrl != "" {
+		bot.Master = storedBot.Master
+		masterAlreadyRegistered = true
+	}
+
+	return c.Render(bot, masterAlreadyRegistered)
 }
 
 func (c Bot) Login() revel.Result {
@@ -83,6 +94,12 @@ func (c Bot) Callback(oauth_verifier string) revel.Result {
 	c.Session["profile_image_url"] = bot.ProfileImageUrl
 
 	vaquero, _ := infrastructure.GetVaquero()
+	// すでにmasterが要る場合などはそれを適用する
+	var storedBot model.Bot
+	vaquero.Cast(bot.ScreenName, &storedBot)
+	if storedBot.Master.ScreenName != "" && storedBot.Master.ProfileImageUrl != "" {
+		bot.Master = storedBot.Master
+	}
 	vaquero.Store(bot.ScreenName, bot)
 
 	return c.Redirect(Bot.Index)
@@ -108,19 +125,51 @@ func (c Bot) Confirm(master_name string) revel.Result {
 	defer resp.Body.Close()
 	accounts := []model.Master{}
 	_ = json.NewDecoder(resp.Body).Decode(&accounts)
-	// }}}
-
 	var master model.Master
 	if len(accounts) < 1 {
 		return c.Redirect(Bot.Index)
 	}
 	master = accounts[0]
 	master.ProfileImageUrl = strings.Replace(master.ProfileImageUrl, "_normal.", ".", -1)
+	// }}}
 
 	return c.Render(bot, master)
 }
 
-func (c Bot) Update() revel.Result {
+func (c Bot) Update(master_confirmed string) revel.Result {
+
+	bot, ok := checkBotLogined(c)
+	if !ok {
+		c.Redirect(App.Index)
+	}
+
+	vaquero, _ := infrastructure.GetVaquero()
+	vaquero.Cast(bot.ScreenName, bot)
+
+	// {{{ TODO: DRY インフラ
+	resp, _ := model.GetConsumer().Get(
+		"https://api.twitter.com/1.1/users/lookup.json",
+		map[string]string{
+			"screen_name": strings.Replace(master_confirmed, "@", "", 1),
+		},
+		&bot.Token,
+	)
+	defer resp.Body.Close()
+	accounts := []model.Master{}
+	_ = json.NewDecoder(resp.Body).Decode(&accounts)
+	var master model.Master
+	if len(accounts) < 1 {
+		return c.Redirect(Bot.Index)
+	}
+	master = accounts[0]
+	master.ProfileImageUrl = strings.Replace(master.ProfileImageUrl, "_normal.", ".", -1)
+	// }}}
+
+	// Store with master info
+	bot.Master = master
+	vaquero.Store(bot.ScreenName, bot)
+	vaquero.Set("bot."+master.ScreenName, bot.ScreenName)
+
 	return c.Redirect(Bot.Index)
 }
 

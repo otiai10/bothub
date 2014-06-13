@@ -35,7 +35,7 @@ func (c Bot) Login() revel.Result {
 
 	// 一時的に使えるRequestTokenを取得する
 	requestToken, url, err := model.GetConsumer().GetRequestTokenAndUrl(
-		fmt.Sprintf("http://%s:%s/bot/login/callback", "localhost", "9000"),
+		fmt.Sprintf("http://%s:%s/bot/login/callback", "localhost", "19000"),
 	)
 
 	if err != nil {

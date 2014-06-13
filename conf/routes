@@ -5,8 +5,14 @@
 module:testrunner
 
 GET     /                                       App.Index
+
 GET     /api                                    Api.Index
 POST    /api/queue/add                          Api.QueueAdd
+
+POST    /queue/add                              Queue.Add
+
+GET     /master/login                           Master.Login
+GET     /master/login/callback                  Master.Callback
 
 GET     /bot                                    Bot.Index
 GET     /bot/login                              Bot.Login

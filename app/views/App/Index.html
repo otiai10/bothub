@@ -4,8 +4,26 @@
 
 <div class="container">
   <div class="row">
+    {{if .loginedAsMaster}}
+      <div class="col-md-6">
+        {{template "partials/account/bar.html" .master}}
+      </div>
+      <div class="col-md-6">
+        {{template "partials/queue/create-form.html"}}
+      </div>
+    {{else}}
+      <div class="col-md-12">
+        <div class="btn-container alone">
+          <a href="/master/login" class="btn btn-default">ログイン</a>
+        </div>
+      </div>
+    {{end}}
+  </div>
+  <div class="row">
     <div class="col-md-12">
-      <a href="/bot/login" class="btn btn-default">Botとしてログイン</a>
+      <div class="btn-container alone">
+        <a href="/bot/login" class="btn btn-default">Botとしてログイン</a>
+      </div>
     </div>
   </div>
 <div>

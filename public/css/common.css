@@ -18,8 +18,17 @@ div.col-md-12.single {
 img.account-big {
     width: 300px;
 }
+/* account/bar.htmlのなかのアイコン */
+img.account-bar {
+    width: 60px;
+}
+
 /* 1ボタンだけの容れ物 */
 div.btn-container.alone {
     padding-top: 24px;
     padding-bottom: 24px;    
+}
+/* パネルな中でform-controlはradiusしない */
+.panel.queue > .form-control {
+    border-radius: 0;
 }

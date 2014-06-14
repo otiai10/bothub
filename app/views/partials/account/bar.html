@@ -1,8 +1,17 @@
-<div class="row">
-  <div class="col-md-6">
-    <img title="{{.ScreenName}}" src="{{.ProfileImageUrl}}" class="account-bar">
-  </div>
-  <div class="col-md-6">
-    <a href="https://twitter.com/{{.ScreenName}}" target="_blank">@{{.ScreenName}}</a>
+<div class="row account-bar-container">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-3">
+        <img class="img-rounded account-bar" title="{{.master.ScreenName}}" src="{{.master.ProfileImageUrl}}">
+      </div>
+      <div class="col-xs-6">
+        <div class="balloon balloon-right">
+          {{.message}}
+        </div>
+      </div>
+      <div class="col-xs-3 ballooner-right">
+        <img class="img-rounded account-bar" title="{{.bot.ScreenName}}" src="{{.bot.ProfileImageUrl}}">
+      </div>
+    </div>
   </div>
 </div>

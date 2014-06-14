@@ -34,7 +34,7 @@ func (c Queue) Add(finish string, text string) revel.Result {
 	queue := model.NewQueue(master.ScreenName, t, text)
 	model.GetObserver().Enqueue(queue)
 
-	return c.Redirect(App.Index)
+	return c.Redirect("/?message=かしこまり〜")
 }
 func (c Queue) checkMasterLogined() (master *model.Master, ok bool) {
 	screenName, nameOK := c.Session["screen_name"]

@@ -16,7 +16,11 @@ div.col-md-12.single {
 
 /* account/bit.htmlのなかのアイコン */
 img.account-big {
-    width: 300px;
+    width: 50%;
+}
+/* account/barのコンテナ */
+div.account-bar-container {
+    padding-bottom: 10px;
 }
 /* account/bar.htmlのなかのアイコン */
 img.account-bar {
@@ -32,3 +36,69 @@ div.btn-container.alone {
 .panel.queue > .form-control {
     border-radius: 0;
 }
+/** {{{ @吹き出し
+ * Usage
+ * <div class="balloon balloon-right">
+ *   へいへい右から言うよ
+ * </div>
+ * <div class="balloon balloon-left">
+ *   はいはい左から応えるよ
+ * </div>
+ */
+.balloon {
+    font-size: xx-small;
+    border: 1px solid #ddd;
+    color: #333;
+    border-radius: 4px;
+    padding: 4px;
+    position: relative;
+    margin: 4px;
+}
+/* 左の吹き出し */
+.balloon-left:after, .balloon-left:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.balloon-left:after {
+    border-right-color: #fff;
+    border-width:       4px;
+    margin-top:        -4px;
+}
+.balloon-left:before {
+    border-color:      #fff;
+    border-right-color: #ddd;
+    border-width:       5px;
+    margin-top:        -5px;
+}
+/* 右の吹き出し */
+.ballooner-right {
+    padding-left: 0;
+}
+.balloon-right:after, .balloon-right:before {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.balloon-right:after {
+    border-left-color: #fff;
+    border-width:       4px;
+    margin-top:        -4px;
+}
+.balloon-right:before {
+    border-color:      #fff;
+    border-left-color: #ddd;
+    border-width:       5px;
+    margin-top:        -5px;
+}
+/* @吹き出し }}} */

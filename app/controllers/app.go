@@ -3,6 +3,9 @@ package controllers
 import "github.com/revel/revel"
 import "bothub/infrastructure"
 import "bothub/model"
+import "time"
+import "fmt"
+import "math/rand"
 
 type App struct {
 	*revel.Controller
@@ -12,6 +15,10 @@ func (c App) Index(message string) revel.Result {
 
 	master, loginedAsMaster := c.checkMasterLogined()
 
+	if !loginedAsMaster {
+		return c.Render()
+	}
+
 	// bot登録状況のチェック
 	vaquero, _ := infrastructure.GetVaquero()
 	var bot model.Bot
@@ -20,12 +27,10 @@ func (c App) Index(message string) revel.Result {
 		loginedAsMaster = false
 		return c.Render(loginedAsMaster, master)
 	}
-
 	_ = vaquero.Cast(botName, &bot)
 
-	if message == "" {
-		message = "ご命令をば〜"
-	}
+	rand.Seed(time.Now().Unix())
+	message = c.Message("bot.default" + fmt.Sprintf("%02d", rand.Intn(5)))
 
 	return c.Render(loginedAsMaster, master, bot, message)
 }

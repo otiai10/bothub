@@ -5,3 +5,8 @@
 # - http://www.rfc-editor.org/rfc/bcp/bcp47.txt
 # - http://www.w3.org/International/questions/qa-accept-lang-locales
 
+bot.default00=Hello, BotHub!
+bot.default01=ご命令をば！
+bot.default02=何か通知を登録しますか？
+bot.default03=ふぃ〜何かご用でしょうか〜
+bot.default04=通知登録しまーす♪

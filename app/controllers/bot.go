@@ -173,6 +173,30 @@ func (c Bot) Update(master_confirmed string) revel.Result {
 	return c.Redirect(Bot.Index)
 }
 
+func (c Bot) Reset(master_name string) revel.Result {
+
+	bot, ok := checkBotLogined(c)
+	if !ok {
+		return c.Redirect(App.Index)
+	}
+
+	vaquero, _ := infrastructure.GetVaquero()
+	vaquero.Cast(bot.ScreenName, bot)
+
+	if bot.Master.ScreenName == master_name {
+		// delete
+		// TODO: move to model
+		vaquero.Delete("bot." + master_name)
+		bot.Master = model.Master{}
+		vaquero.Store(bot.ScreenName, bot)
+		// It doesn't work?
+		c.Flash.Out["success"] = "botのマスター登録をリセットしました"
+		return c.Redirect(Bot.Index)
+	}
+
+	return c.Redirect(Bot.Index)
+}
+
 func checkBotLogined(c Bot) (bot *model.Bot, ok bool) {
 	screenName, nameOK := c.Session["screen_name"]
 	profileImageUrl, iconOK := c.Session["profile_image_url"]

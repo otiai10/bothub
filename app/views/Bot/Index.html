@@ -13,7 +13,8 @@
         <div>登録されてるマスター</div>
         {{template "partials/account/big.html" .bot.Master}}
         <div class="btn-container alone">
-          <form>
+          <form method="POST" action="/bot/reset">
+            <input type="hidden" name="master_name" value="{{.bot.Master.ScreenName}}">
             <input type="submit" class="btn btn-default" value="マスターをリセット">
           </form>
         </div>

@@ -50,7 +50,7 @@ func (obs *Observer) ListenQueue() {
 			)
 			continue
 		}
-		if e = bot.Tweet("@" + timed.Master.Name + " " + timed.Text); e != nil {
+		if e = bot.TweetByQueue(timed); e != nil {
 			revel.ERROR.Println("tweetしっぱい", e)
 			continue
 		}

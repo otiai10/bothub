@@ -41,3 +41,8 @@ func (b *Bot) Tweet(text string) (e error) {
 	)
 	return
 }
+func (b *Bot) TweetByQueue(queue Queue) (e error) {
+	base := "@%s %s %s"
+	suffix := queue.Time.Format("[15時04分]")
+	return b.Tweet(fmt.Sprintf(base, queue.Master.Name, queue.Text, suffix))
+}

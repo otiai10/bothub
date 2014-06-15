@@ -41,6 +41,15 @@ func (obs *Observer) ListenQueue() {
 			revel.ERROR.Println("botが見つからない", timed.Master.Name, e)
 			continue
 		}
+		if bot.Master.ScreenName != timed.Master.Name {
+			revel.ERROR.Printf(
+				"Bot名[%s], Master名[%s] ≠ キューのMaster名[%s]",
+				bot.ScreenName,
+				bot.Master.ScreenName,
+				timed.Master.Name,
+			)
+			continue
+		}
 		if e = bot.Tweet("@" + timed.Master.Name + " " + timed.Text); e != nil {
 			revel.ERROR.Println("tweetしっぱい", e)
 			continue

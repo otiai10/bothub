@@ -9,13 +9,17 @@ type Queue struct {
 }
 
 func NewQueueFromPayload(p Payload) (q Queue) {
-	_dur, _ := time.ParseDuration("3s")
-	return NewQueue("otiai10", time.Now().Add(_dur), "3秒後です"+time.Now().Format("2006010215040506"))
+	return NewQueue(
+		p.Master,
+		time.Unix(p.Finish, 0),
+		p.Text,
+	)
 }
 func NewQueue(masterName string, finish time.Time, text string) Queue {
 	return Queue{
 		Master{
-			Name: masterName,
+			Name:       masterName,
+			ScreenName: masterName,
 		},
 		finish,
 		text,

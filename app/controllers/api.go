@@ -1,7 +1,6 @@
 package controllers
 
 import "github.com/revel/revel"
-import "encoding/json"
 import "errors"
 import "time"
 import "bothub/model"
@@ -17,20 +16,24 @@ func (c Api) Index() revel.Result {
 	})
 }
 
-func (c Api) QueueAdd(queue string) revel.Result {
-	var p model.Payload
-	if e := json.Unmarshal([]byte(queue), &p); e != nil {
-		return c.RenderJson(model.Response{
-			false, e.Error(), p,
-		})
+func (c Api) QueueAdd(user string, finish int64, text string) revel.Result {
+
+	p := model.Payload{
+		Master: user,
+		Finish: finish,
+		Text:   text,
 	}
 	if e := validate(p); e != nil {
+		revel.ERROR.Println(e.Error())
 		return c.RenderJson(model.Response{
 			false, e.Error(), p,
 		})
 	}
+	// TODO: このマスターに対するbotのチェック
 
 	model.GetObserver().Enqueue(model.NewQueueFromPayload(p))
+
+	revel.INFO.Printf("%+v\n", model.NewQueueFromPayload(p))
 
 	return c.RenderJson(model.Response{
 		true, "OK", p,

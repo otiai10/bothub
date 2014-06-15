@@ -10,10 +10,7 @@ type Api struct {
 }
 
 func (c Api) Index() revel.Result {
-	return c.RenderJson(map[string]string{
-		"hoge": "fuga",
-		"foo":  "bar",
-	})
+	return c.Render()
 }
 
 func (c Api) QueueAdd(user string, finish int64, text string) revel.Result {

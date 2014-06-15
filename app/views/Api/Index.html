@@ -1,0 +1,72 @@
+{{set . "title" "BotHub"}}
+{{template "partials/header.html" .}}
+
+<header class="hero-unit">
+  <div class="container">
+    <div class="row">
+      <div class="hero-text col-md-12">
+        <h2><a href="/">BotHub API</a></h2>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <h3 id="queue_add"># Add queue</h3>
+        <div>
+          <p>
+             botによる通知を登録します.
+          </p>
+          <h4>Endpoint</h4>
+          <p>POST http://bothub.otiai10.com/api/queue/add</p>  
+          <h4>Parameters</h4>
+          <table class="table table-striped">
+            <tr><th>name</th><th>type (example)</th><th>description</th></tr>
+            <tr>
+              <td>user</td>
+              <td>string ("otiai10")</td>
+              <td>
+                通知をうけるマスターのTwitterアカウント名です. このマスターに紐づいたbotが登録されていないとエラーを返します.
+              </td>
+            </tr>
+            <tr>
+              <td>finish</td>
+              <td>int64 (1402820316)</td>
+              <td>
+                通知をうける時刻のUnixタイム(秒)です. サーバが受け付けた時刻よりも前の時刻の場合、エラーを返します.
+              </td>
+            </tr>
+            <tr>
+              <td>text</td>
+              <td>string ("パンツをはいて外に出る時間です")</td>
+              <td>
+                通知ツイートの内容です. 100文字以上の場合エラーを返します. なお、/@[a-zA-Z0-9_]+/な文字列はマスター以外のユーザへのメンションと判定され、@をのぞいた形でツイートされます.
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3 id="questions"># Questions and feedbacks</h3>
+        <div>
+          <p>
+            Any feedbacks are welcomed! <a href="https://twitter.com/otiai10">@otiai10</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+<div>
+
+<div class="container">
+  <div class="row">
+    <div class="span6">
+      {{template "partials/flash.html" .}}
+    </div>
+  </div>
+</div>
+
+{{template "partials/footer.html" .}}

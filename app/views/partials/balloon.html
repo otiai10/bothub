@@ -1,0 +1,13 @@
+{{if .flash.accepted}}
+  <div class="balloon balloon-right bg-success">
+    {{.flash.accepted}}
+  </div>
+{{else if .flash.invalid}}
+  <div class="balloon balloon-right bg-warning">
+    {{.flash.invalid}}
+  </div>
+{{else}}
+  <div class="balloon balloon-right">
+    {{.message}}
+  </div>
+{{end}}

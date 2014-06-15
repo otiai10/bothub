@@ -108,4 +108,10 @@ div.btn-container.alone {
 .balloon-left.bg-success:after, .balloon-right.bg-success:after {
     border-left-color: #dff0d8;
 }
+.balloon.bg-warning {
+    background-color: #fcf8e3;
+}
+.balloon-left.bg-warning:after, .balloon-right.bg-warning:after {
+    border-left-color: #fcf8e3;
+}
 /* @吹き出し }}} */

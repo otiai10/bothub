@@ -15,7 +15,6 @@ func (c Queue) GetAcceptedMessage(queue model.Queue) string {
 	rand.Seed(time.Now().Unix())
 	return c.Message("bot.accepted"+fmt.Sprintf("%02d", rand.Intn(5)), queue.Time.Format("02日15時04分"))
 }
-
 func (c Queue) Add(finish string, text string) revel.Result {
 
 	// ログイン状態のチェック
@@ -32,11 +31,17 @@ func (c Queue) Add(finish string, text string) revel.Result {
 	// パラメータの妥当性チェック
 	t, e := time.Parse("2006-01-02T15:04(MST)", finish+"(JST)")
 	if e != nil {
+        c.Flash.Out["invalid"] = c.Message("bot.invalid.invalid_time")
 		return c.Redirect(App.Index)
 	}
 	if t.Before(time.Now()) {
+        c.Flash.Out["invalid"] = c.Message("bot.invalid.time_past")
 		return c.Redirect(App.Index)
 	}
+    if text == "" {
+        c.Flash.Out["invalid"] = c.Message("bot.invalid.text_nil")
+		return c.Redirect(App.Index)
+    }
 
 	queue := model.NewQueue(master.ScreenName, t, text)
 	model.GetObserver().Enqueue(queue)

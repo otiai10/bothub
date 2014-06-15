@@ -5,13 +5,7 @@
         <img class="img-rounded account-bar" title="{{.master.ScreenName}}" src="{{.master.ProfileImageUrl}}">
       </div>
       <div class="col-xs-6">
-        <div class="balloon balloon-right {{if .flash.accepted}}bg-success{{end}}">
-          {{if .flash.accepted}}
-            {{.flash.accepted}}
-          {{else}}
-            {{.message}}
-          {{end}}
-        </div>
+        {{template "partials/balloon.html" .}}
       </div>
       <div class="col-xs-3 ballooner-right">
         <img class="img-rounded account-bar" title="{{.bot.ScreenName}}" src="{{.bot.ProfileImageUrl}}">

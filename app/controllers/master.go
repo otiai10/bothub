@@ -15,7 +15,7 @@ func (c Master) Login() revel.Result {
 
 	// 一時的に使えるRequestTokenを取得する
 	requestToken, url, err := model.GetConsumer().GetRequestTokenAndUrl(
-		fmt.Sprintf("http://%s:%s/master/login/callback", "localhost", "19000"),
+		fmt.Sprintf(revel.Config.StringDefault("callback", ""), "master"),
 	)
 
 	if err != nil {

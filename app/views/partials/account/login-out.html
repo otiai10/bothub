@@ -1,0 +1,9 @@
+{{if .loginedAsMaster}}
+  <div class="btn-container alone">
+    <a href="/logout" class="btn btn-default">ログアウト</a>
+  </div>
+{{else}}
+  <div class="btn-container alone">
+    <a href="/master/login" class="btn btn-default">ログイン</a>
+  </div>
+{{end}}

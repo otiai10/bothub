@@ -5,6 +5,7 @@
 module:testrunner
 
 GET     /                                       App.Index
+GET     /logout                                 Logout.Index
 
 GET     /api                                    Api.Index
 POST    /api/queue/add                          Api.QueueAdd

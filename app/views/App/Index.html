@@ -11,19 +11,16 @@
       <div class="col-md-6">
         {{template "partials/queue/create-form.html"}}
       </div>
-    {{else}}
-      <div class="col-md-12">
-        <div class="btn-container alone">
-          <a href="/master/login" class="btn btn-default">ログイン</a>
-        </div>
-      </div>
     {{end}}
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-6">
       <div class="btn-container alone">
         <a href="/bot/login" class="btn btn-default">Botとしてログイン</a>
       </div>
+    </div>
+    <div class="col-xs-6">
+      {{template "partials/account/login-out.html" .}}
     </div>
   </div>
 <div>

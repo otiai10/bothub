@@ -5,8 +5,14 @@
 # - http://www.rfc-editor.org/rfc/bcp/bcp47.txt
 # - http://www.w3.org/International/questions/qa-accept-lang-locales
 
-bot.default00=Hello, BotHub!
+bot.default00=登録された時間と内容でTwitterでメンション送りますよー
 bot.default01=ご命令をば！
 bot.default02=何か通知を登録しますか？
 bot.default03=ふぃ〜何かご用でしょうか〜
-bot.default04=通知登録しまーす♪
+bot.default04=通知登録しますよーなんでもどうぞー♪
+
+bot.accepted00=オッケーでーす、%sに通知します
+bot.accepted01=%sでうけたまわりでーす！
+bot.accepted02=かしこまりました！%sの通知登録しときまーす
+bot.accepted03=%sですねー登録しときましたー
+bot.accepted04=おk %sね、忘れないようにしなきゃ

@@ -4,9 +4,16 @@ import "github.com/revel/revel"
 import "bothub/model"
 import "bothub/infrastructure"
 import "time"
+import "math/rand"
+import "fmt"
 
 type Queue struct {
 	*revel.Controller
+}
+
+func (c Queue) GetAcceptedMessage(queue model.Queue) string {
+	rand.Seed(time.Now().Unix())
+	return c.Message("bot.accepted"+fmt.Sprintf("%02d", rand.Intn(5)), queue.Time.Format("02日15時04分"))
 }
 
 func (c Queue) Add(finish string, text string) revel.Result {
@@ -34,7 +41,9 @@ func (c Queue) Add(finish string, text string) revel.Result {
 	queue := model.NewQueue(master.ScreenName, t, text)
 	model.GetObserver().Enqueue(queue)
 
-	return c.Redirect("/?message=かしこまり〜")
+	c.Flash.Out["accepted"] = c.GetAcceptedMessage(queue)
+
+	return c.Redirect(App.Index)
 }
 func (c Queue) checkMasterLogined() (master *model.Master, ok bool) {
 	screenName, nameOK := c.Session["screen_name"]

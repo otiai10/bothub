@@ -5,8 +5,12 @@
         <img class="img-rounded account-bar" title="{{.master.ScreenName}}" src="{{.master.ProfileImageUrl}}">
       </div>
       <div class="col-xs-6">
-        <div class="balloon balloon-right">
-          {{.message}}
+        <div class="balloon balloon-right {{if .flash.accepted}}bg-success{{end}}">
+          {{if .flash.accepted}}
+            {{.flash.accepted}}
+          {{else}}
+            {{.message}}
+          {{end}}
         </div>
       </div>
       <div class="col-xs-3 ballooner-right">

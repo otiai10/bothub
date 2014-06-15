@@ -101,4 +101,11 @@ div.btn-container.alone {
     border-width:       5px;
     margin-top:        -5px;
 }
+/* 色 */
+.balloon.bg-success {
+    background-color: #dff0d8;
+}
+.balloon-left.bg-success:after, .balloon-right.bg-success:after {
+    border-left-color: #dff0d8;
+}
 /* @吹き出し }}} */

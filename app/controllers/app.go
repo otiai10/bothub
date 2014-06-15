@@ -11,7 +11,14 @@ type App struct {
 	*revel.Controller
 }
 
-func (c App) Index(message string) revel.Result {
+func (c App) GetDefaultMessage() string {
+	rand.Seed(time.Now().Unix())
+	return c.Message("bot.default" + fmt.Sprintf("%02d", rand.Intn(5)))
+}
+
+func (c App) Index() revel.Result {
+
+	message := c.GetDefaultMessage()
 
 	master, loginedAsMaster := c.checkMasterLogined()
 
@@ -28,9 +35,6 @@ func (c App) Index(message string) revel.Result {
 		return c.Render(loginedAsMaster, master)
 	}
 	_ = vaquero.Cast(botName, &bot)
-
-	rand.Seed(time.Now().Unix())
-	message = c.Message("bot.default" + fmt.Sprintf("%02d", rand.Intn(5)))
 
 	return c.Render(loginedAsMaster, master, bot, message)
 }

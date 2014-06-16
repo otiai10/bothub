@@ -4,6 +4,14 @@
 
 <div class="container">
   <div class="row">
+    <div class="span6">
+      {{template "partials/flash.html" .}}
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
     {{if .loginedAsMaster}}
       <div class="col-md-6">
         {{template "partials/account/bar.html" .}}
@@ -15,6 +23,7 @@
         {{template "partials/tutorial.html"}}
     {{end}}
   </div>
+
   <div class="row">
     <div class="col-xs-6">
       <div class="btn-container alone">
@@ -26,13 +35,5 @@
     </div>
   </div>
 <div>
-
-<div class="container">
-  <div class="row">
-    <div class="span6">
-      {{template "partials/flash.html" .}}
-    </div>
-  </div>
-</div>
 
 {{template "partials/footer.html" .}}

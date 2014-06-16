@@ -32,6 +32,7 @@ func (c App) Index() revel.Result {
 	var botName string
 	if botName = vaquero.Get("bot." + master.ScreenName); botName == "" {
 		loginedAsMaster = false
+		c.Flash.Error("ログインはしてるけど、貴殿をマスター登録しているBotちゃんが見つかりませんでした.まずはBotとしてログインしてマスター登録してください.")
 		return c.Render(loginedAsMaster, master)
 	}
 	_ = vaquero.Cast(botName, &bot)

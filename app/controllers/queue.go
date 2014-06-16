@@ -31,8 +31,10 @@ func (c Queue) Add(finish string, text string) revel.Result {
 	// パラメータの妥当性チェック
 	t, e := time.Parse("2006-01-02T15:04(MST)", finish+"(JST)")
 	if e != nil {
-		c.Flash.Out["invalid"] = c.Message("bot.invalid.invalid_time")
-		return c.Redirect(App.Index)
+		if t, e = time.Parse("2006-01-02T15:04:05(MST)", finish+"(JST)"); e != nil {
+			c.Flash.Out["invalid"] = c.Message("bot.invalid.invalid_time")
+			return c.Redirect(App.Index)
+		}
 	}
 	if t.Before(time.Now()) {
 		c.Flash.Out["invalid"] = c.Message("bot.invalid.time_past")
